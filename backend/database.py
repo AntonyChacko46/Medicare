@@ -6,18 +6,24 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Use environment variable for DB URL or fallback to a local default
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:root@localhost/medicare")
+SQLALCHEMY_DATABASE_URL = os.getenv(
+    "postgresql://medicare_db_imi6_user:tXbkN9bGaGMB7HlfOiNBjVY3I4nrMQtr@dpg-d8s26anavr4c73f7neeg-a.virginia-postgres.render.com/medicare_db_imi6",
+    "postgresql://postgres:root@localhost/medicare"
+)
 
-# Async engine support is preferred for FastAPI but synchronous is easier for initial setup.
-# Sticking to synchronous driven by requirements for simplicity unless high concurrency needed immediately.
-# Actually, for real-time tracking, async might be better (asyncpg). 
-# But for now, let's stick to standard sync for simplicity and stability in initial setup.
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL,
+    connect_args={"sslmode": "require"}
+)
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine
+)
 
 Base = declarative_base()
+
 
 def get_db():
     db = SessionLocal()
