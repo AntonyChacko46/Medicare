@@ -6,8 +6,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+print("DATABASE_URL =", os.getenv("DATABASE_URL"))
+
 SQLALCHEMY_DATABASE_URL = os.getenv(
-    "postgresql://medicare_db_imi6_user:tXbkN9bGaGMB7HlfOiNBjVY3I4nrMQtr@dpg-d8s26anavr4c73f7neeg-a.virginia-postgres.render.com/medicare_db_imi6",
+    "DATABASE_URL",
     "postgresql://postgres:root@localhost/medicare"
 )
 
@@ -31,3 +33,4 @@ def get_db():
         yield db
     finally:
         db.close()
+        
